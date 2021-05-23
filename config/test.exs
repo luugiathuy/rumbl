@@ -19,6 +19,10 @@ config :rumbl_web, RumblWeb.Endpoint,
   http: [port: 4002],
   server: false
 
+config :info_sys, :wolfram,
+  app_id: "1234",
+  http_client: InfoSys.Test.HTTPClient
+
 # Print only warnings and errors during test
 config :logger, level: :warn
 

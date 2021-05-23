@@ -5,6 +5,7 @@ defmodule InfoSys.Wolfram do
   @behaviour InfoSys.Backend
 
   @base "http://api.wolframalpha.com/v2/query"
+  @http Application.get_env(:info_sys, :wolfram)[:http_client] || :httpc
 
   @impl true
   def name, do: "wolfram"
@@ -26,7 +27,7 @@ defmodule InfoSys.Wolfram do
   end
 
   defp fetch_xml(query) do
-    {:ok, {_, _, body}} = :httpc.request(String.to_charlist(url(query)))
+    {:ok, {_, _, body}} = @http.request(String.to_charlist(url(query)))
 
     body
   end
