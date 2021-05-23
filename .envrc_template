@@ -4,3 +4,5 @@ export DATABASE_PORT=5432
 export DATABASE_USER=
 export DATABASE_PASSWORD=
 export DATABASE_NAME=rumbl_dev
+
+export WOLFRAM_APP_ID=
