@@ -6,7 +6,8 @@ defmodule RumblWeb.AnnotationView do
       id: annotation.id,
       body: annotation.body,
       at: annotation.at,
-      user: render_one(annotation.user, RumblWeb.UserView, "user.json")
+      user: render_one(annotation.user, RumblWeb.UserView, "user.json"),
+      inserted_at: annotation.inserted_at
     }
   end
 end

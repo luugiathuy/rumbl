@@ -17,7 +17,10 @@ let Video = {
     let msgContainer = document.getElementById("msg-container");
     let msgInput = document.getElementById("msg-input");
     let postButton = document.getElementById("msg-submit");
-    let vidChannel = socket.channel("videos:" + videoId);
+    let lastSeenInsertedAt = null;
+    let vidChannel = socket.channel("videos:" + videoId, () => {
+      return { last_seen_inserted_at: lastSeenInsertedAt };
+    });
 
     postButton.addEventListener("click", (e) => {
       let payload = { body: msgInput.value, at: Player.getCurrentTime() };
@@ -40,12 +43,17 @@ let Video = {
     });
 
     vidChannel.on("new_annotation", (resp) => {
+      lastSeenInsertedAt = resp.inserted_at;
       this.renderAnnotation(msgContainer, resp);
     });
 
     vidChannel
       .join()
       .receive("ok", (resp) => {
+        let insertedAts = resp.annotations.map((ann) => new Date(ann.inserted_at));
+        if (insertedAts.length > 0) {
+          lastSeenInsertedAt = Math.max(...insertedAts);
+        }
         this.scheduleMessages(msgContainer, resp.annotations);
       })
       .receive("error", (reason) => console.log("join failed", reason));
