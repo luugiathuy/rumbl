@@ -15,7 +15,7 @@ defmodule Rumbl.Multimedia.Video do
 
     has_many :annotations, Rumbl.Multimedia.Annotation
 
-    timestamps()
+    timestamps(type: :utc_datetime_usec)
   end
 
   @doc false

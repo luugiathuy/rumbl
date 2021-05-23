@@ -1,3 +1,4 @@
+import { Presence } from "phoenix";
 import Player from "./player";
 
 let Video = {
@@ -17,9 +18,20 @@ let Video = {
     let msgContainer = document.getElementById("msg-container");
     let msgInput = document.getElementById("msg-input");
     let postButton = document.getElementById("msg-submit");
+    let userList = document.getElementById("user-list");
     let lastSeenInsertedAt = null;
     let vidChannel = socket.channel("videos:" + videoId, () => {
       return { last_seen_inserted_at: lastSeenInsertedAt };
+    });
+
+    let presence = new Presence(vidChannel);
+    presence.onSync(() => {
+      userList.innerHTML = presence
+        .list((id, { metas: [first, ...rest] }) => {
+          let count = rest.length + 1;
+          return `<li>${id}: (${count})</li>`;
+        })
+        .join("");
     });
 
     postButton.addEventListener("click", (e) => {
@@ -50,9 +62,16 @@ let Video = {
     vidChannel
       .join()
       .receive("ok", (resp) => {
-        let insertedAts = resp.annotations.map((ann) => new Date(ann.inserted_at));
+        let insertedAts = resp.annotations.map((ann) => ann.inserted_at);
         if (insertedAts.length > 0) {
-          lastSeenInsertedAt = Math.max(...insertedAts);
+          lastSeenInsertedAt = insertedAts.reduce((a, b) => {
+            const aDate = new Date(a);
+            const bDate = new Date(b);
+            if (aDate.getTime() > bDate.getTime) {
+              return a;
+            }
+            return b;
+          });
         }
         this.scheduleMessages(msgContainer, resp.annotations);
       })

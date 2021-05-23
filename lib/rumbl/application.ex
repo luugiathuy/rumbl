@@ -14,9 +14,10 @@ defmodule Rumbl.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Rumbl.PubSub},
       # Start the Endpoint (http/https)
-      RumblWeb.Endpoint
+      RumblWeb.Endpoint,
       # Start a worker by calling: Rumbl.Worker.start_link(arg)
       # {Rumbl.Worker, arg}
+      RumblWeb.Presence
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

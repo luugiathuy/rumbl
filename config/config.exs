@@ -8,8 +8,10 @@
 use Mix.Config
 
 config :rumbl,
-  ecto_repos: [Rumbl.Repo],
-  migration_primary_key: [type: :uuid]
+  ecto_repos: [Rumbl.Repo]
+
+config :rumbl, Rumbl.Repo, migration_primary_key: [type: :uuid]
+config :rumbl, Rumbl.Repo, migration_timestamps: [type: :timestamptz]
 
 # Configures the endpoint
 config :rumbl, RumblWeb.Endpoint,

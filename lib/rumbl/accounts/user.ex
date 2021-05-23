@@ -11,7 +11,7 @@ defmodule Rumbl.Accounts.User do
     field :password, :string, virtual: true
     field :password_hash, :string
 
-    timestamps()
+    timestamps(type: :utc_datetime_usec)
   end
 
   def changeset(user, attrs) do

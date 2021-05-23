@@ -8,7 +8,7 @@ defmodule Rumbl.Multimedia.Category do
   schema "categories" do
     field :name, :string
 
-    timestamps()
+    timestamps(type: :utc_datetime_usec)
   end
 
   @doc false
