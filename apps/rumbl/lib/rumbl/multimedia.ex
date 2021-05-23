@@ -132,6 +132,10 @@ defmodule Rumbl.Multimedia do
     %Annotation{video_id: video_id, user_id: user_id}
     |> Annotation.changeset(attrs)
     |> Repo.insert()
+    |> case do
+      {:ok, annotation} -> {:ok, Repo.preload(annotation, :user)}
+      error -> error
+    end
   end
 
   def list_annotations(%Video{} = video, nil) do
